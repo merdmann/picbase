@@ -1,0 +1,51 @@
+# ***************************************************************************
+# *  $Id: make.conf 216 2008-10-05 19:09:26Z merdmann $
+# *
+# *  Thu Nov 29 21:15:34 2007
+# *  Copyright  2007,2008  Michael Erdmann
+# *  Email: michael.erdmann@snafu.de
+# ****************************************************************************/
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+## this file contains the configuration setting for the make process.
+sinclude $(ROOT)/make.conf.local
+
+ASMHEADER="C:/Program Files (x86)/gputils/header"
+SDCPORT=-mpic16 -p18f4550 --pstack-model=large
+
+CC=sdcc
+AS=gpasm
+RM=rm -f
+
+CFLAGS=--no-crt --ivt-loc=0x800 --pstack-model=large --optimize-cmp --optimize-df --use-non-free -I.. -I. $(SDCPORT) -DUSE_TICK_TIMER=0
+ASMFLAGS=-I$(ASMHEADER) -p18f4550 -DUSE_TICK_TIMER=0
+
+
+LDFLAGS=-use-non-free $(SDCPORT) -w -m -s
+
+
+PLFCC=gcc
+##
+## Compiler rules
+##
+.SUFFIXES: .i .o .c
+
+.i.o:
+	$(AS) -c $(ASMFLAGS) $*.i -o $*.o
+
+
+.c.o:
+	$(CC) $(CFLAGS)  -c $<

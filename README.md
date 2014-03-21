@@ -1,4 +1,4 @@
 picbase
 =======
 
-A basic environment for PIC development
+A basic environment template for PIC development
